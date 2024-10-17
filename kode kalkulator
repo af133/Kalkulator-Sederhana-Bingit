@@ -1,0 +1,116 @@
+using System; // Mengimpor namespace System yang menyediakan fungsi dasar seperti input/output
+
+// Kelas abstrak sebagai basis untuk kalkulator
+abstract class Kalkulator
+{
+    public abstract double Hitung(double a, double b); // Mendeklarasikan metode abstrak Hitung yang akan diimplementasikan oleh kelas turunan
+    public abstract void CetakHasil(); // Mendeklarasikan metode abstrak CetakHasil untuk mencetak hasil operasi
+}
+
+// Interface untuk mendefinisikan operasi matematika
+interface IOperasi
+{
+    double Tambah(double a, double b); // Mendeklarasikan metode Tambah yang mengembalikan hasil penjumlahan
+    double Kurang(double a, double b); // Mendeklarasikan metode Kurang yang mengembalikan hasil pengurangan
+    double Kali(double a, double b);   // Mendeklarasikan metode Kali yang mengembalikan hasil perkalian
+    double Bagi(double a, double b);   // Mendeklarasikan metode Bagi yang mengembalikan hasil pembagian
+}
+
+// Kelas KalkulatorSederhana yang mengimplementasikan kelas abstrak Kalkulator dan interface IOperasi
+class KalkulatorSederhana : Kalkulator, IOperasi
+{
+    private double hasil; // Mendeklarasikan variabel private untuk menyimpan hasil operasi
+
+    public override double Hitung(double a, double b)
+    {
+        // Implementasi metode Hitung, menggunakan operasi penjumlahan sebagai default
+        hasil = Tambah(a, b);
+        return hasil; // Mengembalikan hasil operasi
+    }
+
+    public override void CetakHasil()
+    {
+        // Implementasi metode CetakHasil untuk menampilkan hasil operasi
+        Console.WriteLine($"Hasil operasi: {hasil}");
+    }
+
+    public double Tambah(double a, double b)
+    {
+        // Implementasi metode Tambah, mengembalikan hasil penjumlahan dua angka
+        return a + b;
+    }
+
+    public double Kurang(double a, double b)
+    {
+        // Implementasi metode Kurang, mengembalikan hasil pengurangan dua angka
+        return a - b;
+    }
+
+    public double Kali(double a, double b)
+    {
+        // Implementasi metode Kali, mengembalikan hasil perkalian dua angka
+        return a * b;
+    }
+
+    public double Bagi(double a, double b)
+    {
+        // Implementasi metode Bagi, memeriksa apakah pembagian dengan nol
+        if (b == 0)
+        {
+            Console.WriteLine("Pembagian dengan nol tidak valid."); // Pesan kesalahan jika pembagi adalah nol
+            return double.NaN; // Mengembalikan nilai NaN jika tidak valid
+        }
+        return a / b; // Mengembalikan hasil pembagian jika pembagi bukan nol
+    }
+}
+
+// Kelas utama Program sebagai titik awal aplikasi
+class Program
+{
+    static void Main(string[] args)
+    {
+        KalkulatorSederhana kalkulator = new KalkulatorSederhana(); // Membuat objek KalkulatorSederhana
+
+        // Menampilkan menu untuk memilih operasi
+        Console.WriteLine("Pilih operasi: ");
+        Console.WriteLine("[1] Tambah");
+        Console.WriteLine("[2] Kurang");
+        Console.WriteLine("[3] Kali");
+        Console.WriteLine("[4] Bagi");
+
+        // Membaca input pilihan operasi dari pengguna
+        int pilihan = int.Parse(Console.ReadLine());
+
+        // Membaca input angka pertama
+        Console.WriteLine("Masukkan angka pertama:");
+        double angka1 = double.Parse(Console.ReadLine());
+
+        // Membaca input angka kedua
+        Console.WriteLine("Masukkan angka kedua:");
+        double angka2 = double.Parse(Console.ReadLine());
+
+        // Menentukan operasi berdasarkan pilihan pengguna
+        switch (pilihan)
+        {
+            case 1:
+                kalkulator.Hitung(angka1, angka2); // Menghitung dengan operasi penjumlahan
+                kalkulator.CetakHasil(); // Menampilkan hasil
+                break;
+            case 2:
+                kalkulator.Hitung(kalkulator.Kurang(angka1, angka2), 0); // Menghitung dengan operasi pengurangan
+                kalkulator.CetakHasil(); // Menampilkan hasil
+                break;
+            case 3:
+                kalkulator.Hitung(kalkulator.Kali(angka1, angka2), 0); // Menghitung dengan operasi perkalian
+                kalkulator.CetakHasil(); // Menampilkan hasil
+                break;
+            case 4:
+                kalkulator.Hitung(kalkulator.Bagi(angka1, angka2), 0); // Menghitung dengan operasi pembagian
+                kalkulator.CetakHasil(); // Menampilkan hasil
+                break;
+            default:
+                Console.WriteLine("Pilihan tidak valid."); // Menampilkan pesan jika pilihan tidak valid
+                break;
+        }
+    }
+}
